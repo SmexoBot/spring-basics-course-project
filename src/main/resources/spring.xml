@@ -12,22 +12,29 @@
         http://www.springframework.org/schema/util/spring-util-3.2.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.2.xsd">
-        
-        
+
+    <import resource="db.xml"/>
+    <import resource="loggers.xml"/>
+    <import resource="aspects.xml"/>
+
    <!-- Different way to define PropertyPlaceholderConfigurer :) -->
-   <context:property-placeholder location="${CLIENT_PROPS:classpath:client.properties}, 
-                                           ${DB_PROPS:classpath:db.properties}"
-        system-properties-mode="OVERRIDE" ignore-resource-not-found="false"/>
+    <context:property-placeholder
+            location="classpath:client.properties, classpath:db.properties"
+            ignore-resource-not-found="true"/>
 
     <bean id="client" class="com.yet.spring.core.beans.Client"
         p:greeting="${greeting}">
         <constructor-arg index="0" value="${id}" />
         <constructor-arg value="${name}" />
+        <constructor-arg value="${city}"/>
     </bean>
 
     <util:map id="loggerMap">
         <entry key="INFO" value-ref="consoleEventLogger" />
         <entry key="ERROR" value-ref="combinedEventLogger" />
+        <entry key="WARNING" value-ref="consoleEventLogger"/>
+        <entry key="SUCCESS" value-ref="consoleEventLogger" />
+        <entry key="ALERT" value-ref="consoleEventLogger" />
     </util:map>
 
     <bean id="app" class="com.yet.spring.core.App">
